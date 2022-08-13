@@ -1,11 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Linq.Expressions;
 using Unity.VisualScripting.Dependencies.Sqlite;
-using UnityEngine;
 public class SqliteDataHelper : Singleton<SqliteDataHelper>
 {
     public SQLiteConnection connection;
@@ -75,6 +69,7 @@ public class SqliteDataHelper : Singleton<SqliteDataHelper>
         return connection = new SQLiteConnection(dbPath, SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
     }
 
+    //¼ì²é¿âÊÇ·ñ´æÔÚ
     public bool IsTableExist(string TableName)
     {
         SQLiteCommand mDbCmd = connection.CreateCommand($"SELECT COUNT(*) FROM sqlite_master where type='table' and name='{TableName}';");
@@ -82,5 +77,11 @@ public class SqliteDataHelper : Singleton<SqliteDataHelper>
             return false;
         else
             return true;
+    }
+
+    private void OnApplicationQuit()
+    {
+        if (connection != null)
+            connection.Close();
     }
 }
